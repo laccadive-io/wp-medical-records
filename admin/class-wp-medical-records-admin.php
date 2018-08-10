@@ -61,6 +61,9 @@ class Wp_Medical_Records_Admin {
 			// 'manage_options', 'patients', 'patients_page' );
 			global $submenu;
 			$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
+			$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
+			$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
+			// $submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
 
 			add_action( 'all_admin_notices', 'wpmr_admin_tabs' );
 		}
@@ -74,14 +77,17 @@ class Wp_Medical_Records_Admin {
 		}
 
 		function wpmr_admin_tabs() {
-			if(get_current_screen()->id == 'edit-patients') {
-				echo '<h1 class="nav-tab-wrapper">';
-				echo '<a href="edit.php?post_type=patients" class="nav-tab nav-tab-1">New Patient</a>';
-				echo '<a href="edit.php?post_type=patients" class="nav-tab nav-tab-active nav-tab-1">Patients</a>';
-				echo '<a href="edit.php?post_type=patients" class="nav-tab nav-tab-1">Episodes</a>';
-				echo '<a href="edit.php?post_type=patients" class="nav-tab nav-tab-1">Visits</a>';
-				echo '<a href="edit.php?post_type=patients" class="nav-tab nav-tab-1">Appointments</a>';
-				echo '</h1>';
+			$cs = get_current_screen()->id;
+			if($cs == 'edit-patients'|| $cs == 'patients' || $cs == 'edit-episodes' || $cs == 'edit-visits') {
+				?>
+				<h1 class="nav-tab-wrapper">
+					<a href="post-new.php?post_type=patients" class="nav-tab <?php if($cs == 'patients') echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">New Patient</a>
+					<a href="edit.php?post_type=patients" class="nav-tab <?php if($cs == 'edit-patients') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Patients</a>
+					<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
+					<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
+					<!-- <a href="edit.php?post_type=patients" class="nav-tab nav-tab-5">Appointments</a> -->
+				</h1>
+				<?php
 			}
 		}
 

@@ -126,7 +126,9 @@ class Wp_Medical_Records_Loader {
 		}
 
 		add_action('init', array( $this, 'wpmr_patients_cpt') );
-
+		add_action('init', array( $this, 'wpmr_episodes_cpt') );
+		add_action('init', array( $this, 'wpmr_visits_cpt') );
+		
 		$wpmr_meta = new WPMR_Meta();
 		add_action('init', array($wpmr_meta,'patient_meta_install'));
 
@@ -163,4 +165,61 @@ class Wp_Medical_Records_Loader {
 		register_post_type( 'patients', $args ); 
 	}
 
+	public static function wpmr_episodes_cpt() {
+		$labels = array(
+			'name'               => _x( 'Episodes', 'Episodes for WPMR' ),
+			'singular_name'      => _x( 'Episode', 'Episode for WPMR' ),
+			'add_new'            => _x( 'Add New', 'episode' ),
+			'add_new_item'       => __( 'Add New Episode' ),
+			'edit_item'          => __( 'Edit Episode' ),
+			'new_item'           => __( 'New Episode' ),
+			'all_items'          => __( 'All Episodes' ),
+			'view_item'          => __( 'View Episode' ),
+			'search_items'       => __( 'Search Episodes' ),
+			'not_found'          => __( 'No episode found' ),
+			'not_found_in_trash' => __( 'No episodes found in the Trash' ), 
+			'parent_item_colon'  => '',
+			'menu_name'          => 'Episodes'
+		);
+		$args = array(
+			'labels'        => $labels,
+			'description'   => '',
+			'public'        => true,
+			'show_in_menu' => false,
+			// 'menu_position' => 2,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
+			'has_archive'   => true,
+			'taxonomies'  => array( ),
+		);
+		register_post_type( 'episodes', $args ); 
+	}
+
+	public static function wpmr_visits_cpt() {
+		$labels = array(
+			'name'               => _x( 'Visits', 'Visits for WPMR' ),
+			'singular_name'      => _x( 'Visit', 'Visit for WPMR' ),
+			'add_new'            => _x( 'Add New', 'visit' ),
+			'add_new_item'       => __( 'Add New Visit' ),
+			'edit_item'          => __( 'Edit Visit' ),
+			'new_item'           => __( 'New Visit' ),
+			'all_items'          => __( 'All Visits' ),
+			'view_item'          => __( 'View Visit' ),
+			'search_items'       => __( 'Search Visits' ),
+			'not_found'          => __( 'No visits found' ),
+			'not_found_in_trash' => __( 'No visits found in the Trash' ), 
+			'parent_item_colon'  => '',
+			'menu_name'          => 'Visits'
+		);
+		$args = array(
+			'labels'        => $labels,
+			'description'   => '',
+			'public'        => true,
+			'show_in_menu' => false,
+			// 'menu_position' => 2,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
+			'has_archive'   => true,
+			'taxonomies'  => array( ),
+		);
+		register_post_type( 'visits', $args ); 
+	}
 }
