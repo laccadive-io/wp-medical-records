@@ -115,7 +115,7 @@ class Wp_Medical_Records_Loader {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		require_once plugin_dir_path( __FILE__ ) . 'class-patient-meta-install.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-patient.php';
 
 		foreach ( $this->filters as $hook ) {
 			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
@@ -125,44 +125,11 @@ class Wp_Medical_Records_Loader {
 			add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
 		}
 
-		add_action('init', array( $this, 'wpmr_patients_cpt') );
 		add_action('init', array( $this, 'wpmr_episodes_cpt') );
 		add_action('init', array( $this, 'wpmr_visits_cpt') );
 		
-		$wpmr_meta = new WPMR_Meta();
-		add_action('init', array($wpmr_meta,'patient_meta_install'));
-
-        // hook into init for single site, priority 0 = highest priority
-        add_action('init', array($wpmr_meta,'patient_meta_integrate_wpdb'));
-	}
-
-	public static function wpmr_patients_cpt() {
-		$labels = array(
-			'name'               => _x( 'Patients', 'Patients for WPMR' ),
-			'singular_name'      => _x( 'Patient', 'Patient for WPMR' ),
-			'add_new'            => _x( 'Add New', 'patient' ),
-			'add_new_item'       => __( 'Add New Patient' ),
-			'edit_item'          => __( 'Edit Patient' ),
-			'new_item'           => __( 'New Patient' ),
-			'all_items'          => __( 'All Patients' ),
-			'view_item'          => __( 'View Patient' ),
-			'search_items'       => __( 'Search Patients' ),
-			'not_found'          => __( 'No patients found' ),
-			'not_found_in_trash' => __( 'No patients found in the Trash' ), 
-			'parent_item_colon'  => '',
-			'menu_name'          => 'Patients'
-		);
-		$args = array(
-			'labels'        => $labels,
-			'description'   => '',
-			'public'        => true,
-			'show_in_menu' => false,
-			// 'menu_position' => 2,
-			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
-			'has_archive'   => true,
-			'taxonomies'  => array( ),
-		);
-		register_post_type( 'patients', $args ); 
+		$patient = new Patient();
+		$patient->run();
 	}
 
 	public static function wpmr_episodes_cpt() {

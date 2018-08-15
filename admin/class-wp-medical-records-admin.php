@@ -52,58 +52,65 @@ class Wp_Medical_Records_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		add_action('admin_menu', 'wp_checkup_setup_menu');
+		add_action('admin_menu', array($this, 'wpmr_setup_menu' ) );
  
-		function wp_checkup_setup_menu(){
-			add_menu_page( 'Main Menu Page', 'Medical Records', 'manage_options', 
-			'wpmr-main', 'wp_checkup_init' );
-			// add_submenu_page( 'wpmr-main', 'Patients', 'Patients', 
-			// 'manage_options', 'patients', 'patients_page' );
-			global $submenu;
-			$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
-			$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
-			$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
-			// $submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
+		add_action( 'all_admin_notices', array($this, 'wpmr_admin_tabs' ) );
 
-			add_action( 'all_admin_notices', 'wpmr_admin_tabs' );
-		}
-		 
-		function wp_checkup_init(){
-			echo "<h1>Hello World!</h1>";
-		}
+		add_action( 'admin_head',  array($this, 'menu_highlight' ) );
 
-		function patients_page() {
-			echo "<h1>Hello World 2!</h1>";
-		}
+		// add_shortcode('test',  array($this, 'form_creation' ) );
+	}
 
-		function wpmr_admin_tabs() {
-			$cs = get_current_screen()->id;
-			if($cs == 'edit-patients'|| $cs == 'patients' || $cs == 'edit-episodes' || $cs == 'edit-visits') {
-				?>
-				<h1 class="nav-tab-wrapper">
-					<a href="post-new.php?post_type=patients" class="nav-tab <?php if($cs == 'patients') echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">New Patient</a>
-					<a href="edit.php?post_type=patients" class="nav-tab <?php if($cs == 'edit-patients') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Patients</a>
-					<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
-					<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
-					<!-- <a href="edit.php?post_type=patients" class="nav-tab nav-tab-5">Appointments</a> -->
-				</h1>
-				<?php
-			}
-		}
+	public function wpmr_setup_menu(){
+		add_menu_page( 'Main Menu Page', 'Medical Records', 'manage_options', 
+		'wpmr-main', 'wpmr_home' );
+		// add_submenu_page( 'wpmr-main', 'Patients', 'Patients', 
+		// 'manage_options', 'edit.php?post_type=patients' );
+		global $submenu;
+		$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
+		$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
+		$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
 
-		add_shortcode('test', 'form_creation');
-		function form_creation(){
+	}
+	
+	public function wpmr_admin_tabs() {
+		$cs = get_current_screen()->id;
+		if($cs == 'edit-patients'|| $cs == 'patients' || $cs == 'edit-episodes' || $cs == 'edit-visits') {
 			?>
-			<form>
-			First name: <input type="text" name="firstname"><br>
-			Last name: <input type="text" name="lastname"><br>
-			Date: <input type="text" name="date"><br>
-			Time: <input type="text" name="time"><br>
-			Message: <textarea name="message"></textarea><br />
-			<input type="submit" value="Submit" />
-			</form>
+			<h1 class="nav-tab-wrapper">
+				<a href="post-new.php?post_type=patients" class="nav-tab <?php if($cs == 'patients') echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">New Patient</a>
+				<a href="edit.php?post_type=patients" class="nav-tab <?php if($cs == 'edit-patients') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Patients</a>
+				<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
+				<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
+				<!-- <a href="edit.php?post_type=patients" class="nav-tab nav-tab-5">Appointments</a> -->
+			</h1>
 			<?php
 		}
+	}
+	 
+	public function menu_highlight(){
+		global $parent_file, $submenu_file, $post_type;
+		
+		switch ( $post_type ) {
+			case 'patients':
+				$parent_file = 'wpmr-main'; // WPCS: override ok.
+				$parent_file = 'wpmr-main'; 
+				$submenu_file = 'edit.php?post_type=patients';
+				break;
+		}
+	}
+
+	public function form_creation(){
+		?>
+		<form>
+		First name: <input type="text" name="firstname"><br>
+		Last name: <input type="text" name="lastname"><br>
+		Date: <input type="text" name="date"><br>
+		Time: <input type="text" name="time"><br>
+		Message: <textarea name="message"></textarea><br />
+		<input type="submit" value="Submit" />
+		</form>
+		<?php
 	}
 
 	/**

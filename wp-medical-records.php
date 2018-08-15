@@ -81,5 +81,3 @@ function run_wp_medical_records() {
 }
 run_wp_medical_records();
 
-// so that the patient_meta functions are available
-require_once plugin_dir_path( __FILE__ ) . 'includes/patient-meta-functions.php';
