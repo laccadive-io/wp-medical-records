@@ -1,4 +1,4 @@
-# Testimonials Slider Block
+# WP Medical Records
 
 WP Medical Records is a WordPress plugin for doctor, patient and visit management.
 
