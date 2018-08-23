@@ -82,7 +82,6 @@ class Wp_Medical_Records_Admin {
 				<a href="edit.php?post_type=patients" class="nav-tab <?php if($cs == 'edit-patients') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Patients</a>
 				<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
 				<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
-				<!-- <a href="edit.php?post_type=patients" class="nav-tab nav-tab-5">Appointments</a> -->
 			</h1>
 			<?php
 		}
@@ -93,9 +92,16 @@ class Wp_Medical_Records_Admin {
 		
 		switch ( $post_type ) {
 			case 'patients':
-				$parent_file = 'wpmr-main'; // WPCS: override ok.
 				$parent_file = 'wpmr-main'; 
 				$submenu_file = 'edit.php?post_type=patients';
+				break;
+			case 'episodes':
+				$parent_file = 'wpmr-main'; 
+				$submenu_file = 'edit.php?post_type=episodes';
+				break;
+			case 'visits':
+				$parent_file = 'wpmr-main'; 
+				$submenu_file = 'edit.php?post_type=visits';
 				break;
 		}
 	}
