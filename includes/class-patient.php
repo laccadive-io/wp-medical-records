@@ -82,53 +82,55 @@ class Patient {
 	/* Display the post meta box. */
 	public function wpmr_patient_meta_box( $post ) { ?>
 
-		<?php wp_nonce_field( basename( __FILE__ ), 'wpmr_patient_meta_nonce' ); ?>
-	
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_dob"><?php _e( "Date of Birth:", 'wpmr' ); ?></label>
-			<input class="short datepicker" type="text" name="wpmr_patient_dob" id="wpmr_patient_dob" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_dob', true ) ); ?>" size="30" />
-		</p>
+		<div class="row">
+			<?php wp_nonce_field( basename( __FILE__ ), 'wpmr_patient_meta_nonce' ); ?>
+		
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_dob"><?php _e( "Date of Birth:", 'wpmr' ); ?></label>
+				<input class="form-control datepicker" type="text" name="wpmr_patient_dob" id="wpmr_patient_dob" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_dob', true ) ); ?>" size="30" />
+			</div>
 
-		<?php
-			$gender = get_post_meta( $post->ID, 'wpmr_patient_gender', true );
-		?>
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_gender"><?php _e( "Gender:", 'wpmr' ); ?></label>
-			<select id="wpmr_patient_gender" name="wpmr_patient_gender">
-				<option value="male" <?php if($gender == 'male') echo "selected"; ?> >Male</option>
-				<option value="female" <?php if($gender == 'female') echo "selected"; ?>>Female</option>
-			</select>
-		</p>
+			<?php
+				$gender = get_post_meta( $post->ID, 'wpmr_patient_gender', true );
+			?>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_gender"><?php _e( "Gender:", 'wpmr' ); ?></label>
+				<select class="custom-select" id="wpmr_patient_gender" name="wpmr_patient_gender">
+					<option value="male" <?php if($gender == 'male') echo "selected"; ?> >Male</option>
+					<option value="female" <?php if($gender == 'female') echo "selected"; ?>>Female</option>
+				</select>
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_address_one"><?php _e( "Address Line 1:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_address_one" id="wpmr_patient_address_one" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_address_one', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_address_one"><?php _e( "Address Line 1:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_address_one" id="wpmr_patient_address_one" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_address_one', true ) ); ?>" size="30" />			
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_address_two"><?php _e( "Address Line 2:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_address_two" id="wpmr_patient_address_two" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_address_two', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_address_two"><?php _e( "Address Line 2:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_address_two" id="wpmr_patient_address_two" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_address_two', true ) ); ?>" size="30" />			
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_city"><?php _e( "City:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_city" id="wpmr_patient_city" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_city', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_city"><?php _e( "City:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_city" id="wpmr_patient_city" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_city', true ) ); ?>" size="30" />			
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_country"><?php _e( "Country:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_country" id="wpmr_patient_country" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_country', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_country"><?php _e( "Country:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_country" id="wpmr_patient_country" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_country', true ) ); ?>" size="30" />			
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_mobile"><?php _e( "Mobile Number:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_mobile" id="wpmr_patient_mobile" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_mobile', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_mobile"><?php _e( "Mobile Number:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_mobile" id="wpmr_patient_mobile" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_mobile', true ) ); ?>" size="30" />			
+			</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_email"><?php _e( "Email Address:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_email" id="wpmr_patient_email" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_email', true ) ); ?>" size="30" />			
-		</p>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_patient_email"><?php _e( "Email Address:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_patient_email" id="wpmr_patient_email" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_email', true ) ); ?>" size="30" />			
+			</div>
+		</div>
 
 		<script>
 			var dateToday = new Date();
@@ -154,17 +156,23 @@ class Patient {
 		<?php 
 	}
 	public function wpmr_patient_medical_meta_box( $post ) { ?>
+	<div class="row">
+		<div class="col-md-6 form-group">
+			<label class="wpmr-label " for="wpmr_patient_allergies"><?php _e( "Allergies:", 'wpmr' ); ?></label>
+			<input class="form-control" type="text" name="wpmr_patient_allergies" id="wpmr_patient_allergies" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_allergies', true ) ); ?>" size="30" />
+		</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_allergies"><?php _e( "Allergies:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_allergies" id="wpmr_patient_allergies" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_allergies', true ) ); ?>" size="30" />
-		</p>
+		<div class="col-md-6 form-group">
+			<label class="wpmr-label" for="wpmr_patient_bloodgroup"><?php _e( "Blood Group:", 'wpmr' ); ?></label>
+			<input class="form-control" type="text" name="wpmr_patient_bloodgroup" id="wpmr_patient_bloodgroup" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_bloodgroup', true ) ); ?>" size="30" />
+		</div>
 
-		<p class-"form-field">
-			<label class="wpmr-label" for="wpmr_patient_bloodgroup"><?php _e( "Bloog Group:", 'wpmr' ); ?></label>
-			<input class="short" type="text" name="wpmr_patient_bloodgroup" id="wpmr_patient_bloodgroup" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_bloodgroup', true ) ); ?>" size="30" />
-		</p>
-
+		<div class="col-md-6 form-group">
+			<label class="wpmr-label" for="wpmr_patient_notes"><?php _e( "Notes:", 'wpmr' ); ?></label>
+			<textarea class="form-control" type="text" name="wpmr_patient_notes" id="wpmr_patient_notes" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_notes', true ) ); ?>" size="30" >
+			</textarea>
+		</div>
+	</div>
 		<?php
 	}
 
@@ -192,7 +200,8 @@ class Patient {
 			'wpmr_patient_mobile', 
 			'wpmr_patient_email',
 			'wpmr_patient_allergies',
-			'wpmr_patient_bloodgroup'
+			'wpmr_patient_bloodgroup',
+			'wpmr_patient_notes'
 		];
 
 		foreach($meta_data as $data) {
@@ -243,7 +252,7 @@ class Patient {
 	public function wpmr_enter_title( $input ) {
 		global $post_type;
 		if( is_admin() && 'Enter title here' == $input && 'patients' == $post_type )
-			return 'Enter Full Name';
+			return 'Enter Patient\'s Full Name';
 		return $input;
 	}
 }

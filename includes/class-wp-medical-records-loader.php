@@ -117,6 +117,7 @@ class Wp_Medical_Records_Loader {
 	public function run() {
 		
 		require_once plugin_dir_path( __FILE__ ) . 'class-patient.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-doctor.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-episode.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-visit.php';
 
@@ -130,6 +131,9 @@ class Wp_Medical_Records_Loader {
 		
 		$patient = new Patient();
 		$patient->run();
+
+		$doctor = new Doctor();
+		$doctor->run();
 
 		$episode = new Episode();
 		$episode->run();

@@ -57,7 +57,7 @@ class Wp_Medical_Records_Admin {
 		add_action( 'all_admin_notices', array($this, 'wpmr_admin_tabs' ) );
 
 		add_action( 'admin_head',  array($this, 'menu_highlight' ) );
-
+		// add_action('enqueue_scripts', array($this, 'enqueue_styles'));
 		// add_shortcode('test',  array($this, 'form_creation' ) );
 	}
 
@@ -68,6 +68,7 @@ class Wp_Medical_Records_Admin {
 		// 'manage_options', 'edit.php?post_type=patients' );
 		global $submenu;
 		$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
+		$submenu['wpmr-main'][] = array( 'Doctors', true, 'edit.php?post_type=doctors' );
 		$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
 		$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
 
@@ -80,6 +81,7 @@ class Wp_Medical_Records_Admin {
 			<h1 class="nav-tab-wrapper">
 				<a href="post-new.php?post_type=patients" class="nav-tab <?php if($cs == 'patients') echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">New Patient</a>
 				<a href="edit.php?post_type=patients" class="nav-tab <?php if($cs == 'edit-patients') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Patients</a>
+				<a href="edit.php?post_type=doctors" class="nav-tab <?php if($cs == 'edit-doctors') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Doctors</a>
 				<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
 				<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
 			</h1>
@@ -94,6 +96,10 @@ class Wp_Medical_Records_Admin {
 			case 'patients':
 				$parent_file = 'wpmr-main'; 
 				$submenu_file = 'edit.php?post_type=patients';
+				break;
+			case 'doctors':
+				$parent_file = 'wpmr-main'; 
+				$submenu_file = 'edit.php?post_type=doctors';
 				break;
 			case 'episodes':
 				$parent_file = 'wpmr-main'; 
@@ -139,6 +145,7 @@ class Wp_Medical_Records_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-medical-records-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
 
 	}
 
