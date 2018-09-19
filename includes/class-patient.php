@@ -169,8 +169,7 @@ class Patient {
 
 		<div class="col-md-6 form-group">
 			<label class="wpmr-label" for="wpmr_patient_notes"><?php _e( "Notes:", 'wpmr' ); ?></label>
-			<textarea class="form-control" type="text" name="wpmr_patient_notes" id="wpmr_patient_notes" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_notes', true ) ); ?>" size="30" >
-			</textarea>
+			<textarea class="form-control" type="text" name="wpmr_patient_notes" id="wpmr_patient_notes" ><?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_notes', true ) ); ?></textarea>
 		</div>
 	</div>
 		<?php
