@@ -164,7 +164,18 @@ class Patient {
 
 		<div class="col-md-6 form-group">
 			<label class="wpmr-label" for="wpmr_patient_bloodgroup"><?php _e( "Blood Group:", 'wpmr' ); ?></label>
-			<input class="form-control" type="text" name="wpmr_patient_bloodgroup" id="wpmr_patient_bloodgroup" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_bloodgroup', true ) ); ?>" size="30" />
+			<?php $blood_group = esc_attr( get_post_meta( $post->ID, 'wpmr_patient_bloodgroup', true ) ); ?>
+			<select class="custom-select" name="wpmr_patient_bloodgroup" id="wpmr_patient_bloodgroup">
+				<option disabled value="-1">Select Blood Group</option>
+				<option <?php if( "A+" === $blood_group ) echo "selected"; ?> value="A+">A+</option>
+				<option <?php if( "A-" === $blood_group ) echo "selected"; ?> value="A-">A-</option>
+				<option <?php if( "B+" === $blood_group ) echo "selected"; ?> value="B+">B+</option>
+				<option <?php if( "B-" === $blood_group ) echo "selected"; ?> value="B-">B-</option>
+				<option <?php if( "O+" === $blood_group ) echo "selected"; ?> value="O+">O+</option>
+				<option <?php if( "O-" === $blood_group ) echo "selected"; ?> value="O-">O-</option>
+				<option <?php if( "AB+" === $blood_group ) echo "selected"; ?> value="AB+">AB+</option>
+				<option <?php if( "AB-" === $blood_group ) echo "selected"; ?> value="AB-">AB-</option>
+			</select>
 		</div>
 
 		<div class="col-md-6 form-group">

@@ -158,16 +158,6 @@ class Doctor {
 	public function wpmr_doctor_medical_meta_box( $post ) { ?>
 	<div class="row">
 		<div class="col-md-6 form-group">
-			<label class="wpmr-label " for="wpmr_doctor_allergies"><?php _e( "Allergies:", 'wpmr' ); ?></label>
-			<input class="form-control" type="text" name="wpmr_doctor_allergies" id="wpmr_doctor_allergies" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_doctor_allergies', true ) ); ?>" size="30" />
-		</div>
-
-		<div class="col-md-6 form-group">
-			<label class="wpmr-label" for="wpmr_doctor_bloodgroup"><?php _e( "Blood Group:", 'wpmr' ); ?></label>
-			<input class="form-control" type="text" name="wpmr_doctor_bloodgroup" id="wpmr_doctor_bloodgroup" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_doctor_bloodgroup', true ) ); ?>" size="30" />
-		</div>
-
-		<div class="col-md-6 form-group">
 			<label class="wpmr-label" for="wpmr_doctor_notes"><?php _e( "Notes:", 'wpmr' ); ?></label>
 			<textarea class="form-control" type="text" name="wpmr_doctor_notes" id="wpmr_doctor_notes" ><?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_doctor_notes', true ) ); ?></textarea>
 		</div>
@@ -198,9 +188,7 @@ class Doctor {
 			'wpmr_doctor_country', 
 			'wpmr_doctor_mobile', 
 			'wpmr_doctor_email',
-			'wpmr_doctor_allergies',
-			'wpmr_doctor_bloodgroup',
-			'wpmr_doctor_notes'
+			'wpmr_doctor_notes',
 		];
 
 		foreach($meta_data as $data) {
