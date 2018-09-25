@@ -175,44 +175,44 @@ class Visit {
 			var dateToday = new Date();
 			var yrRange = dateToday.getFullYear() -100 + ":" + (dateToday.getFullYear());
 			(function($){
-				$('.datepicker').datepicker({
-					changeMonth: true,
-            		changeYear: true,
-					yearRange: yrRange, 
-				}); 
-
-				$("#wpmr_visit_patient").chosen({
-					disable_search_threshold: 1,
-					allow_single_deselect: true,
-					disable_search: false,
-					no_results_text: "Oops, nothing found!",
-					width: "95%"
-				}).change(function(data) {
-					console.log(data.currentTarget.value)
-					$.ajax({
-						method: 'get',
-						url: window.ajaxurl,
-						data: {
-							action: 'patient_episodes_ajax',
-							patientId: data.currentTarget.value,
-						},
-						success: function(data) {
-							var jsonData = JSON.parse(data);
-							var options = [];
-							if(jsonData) {
-								options = jsonData.map(item => (
-									`<option value=${item.ID}>${item.post_title}</option>`
-								))
-								options.unshift(`<option value"-1" selected disabled>Select Episode</option>`)
-							} else {
-								options = '<span>This patient does not have an episode yet. Please create one first.</span>';
+				$(document).ready(function() {
+					$('.datepicker').datepicker({
+						changeMonth: true,
+						changeYear: true,
+						yearRange: yrRange, 
+					}); 
+					$("#wpmr_visit_patient").chosen({
+						disable_search_threshold: 1,
+						allow_single_deselect: true,
+						disable_search: false,
+						no_results_text: "Oops, nothing found!",
+						width: "95%"
+					}).change(function(data) {
+						console.log(data.currentTarget.value)
+						$.ajax({
+							method: 'get',
+							url: window.ajaxurl,
+							data: {
+								action: 'patient_episodes_ajax',
+								patientId: data.currentTarget.value,
+							},
+							success: function(data) {
+								var jsonData = JSON.parse(data);
+								var options = [];
+								if(jsonData) {
+									options = jsonData.map(item => (
+										`<option value=${item.ID}>${item.post_title}</option>`
+									))
+									options.unshift(`<option value"-1" selected disabled>Select Episode</option>`)
+								} else {
+									options = '<span>This patient does not have an episode yet. Please create one first.</span>';
+								}
+								$("#wpmr_visit_episode").html(options)
+								$("#wpmr_visit_episode").trigger("chosen:updated");
+								$("#episodeSelect").show();
 							}
-							$("#wpmr_visit_episode").html(options)
-							$("#wpmr_visit_episode").trigger("chosen:updated");
-							$("#episodeSelect").show();
-						}
-					})
-					
+						})
+					})					
 				});
 
 				$("#wpmr_visit_episode").chosen({
