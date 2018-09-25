@@ -120,6 +120,7 @@ class Wp_Medical_Records_Loader {
 		require_once plugin_dir_path( __FILE__ ) . 'class-doctor.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-episode.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-visit.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-admission.php';
 
 		foreach ( $this->filters as $hook ) {
 			add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
@@ -140,5 +141,8 @@ class Wp_Medical_Records_Loader {
 
 		$visit = new Visit();
 		$visit->run();
+
+		$admission = new Admission();
+		$admission->run();
 	}
 }

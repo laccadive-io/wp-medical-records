@@ -71,6 +71,7 @@ class Wp_Medical_Records_Admin {
 		$submenu['wpmr-main'][] = array( 'Doctors', true, 'edit.php?post_type=doctors' );
 		$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
 		$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
+		$submenu['wpmr-main'][] = array( 'Admissions', true, 'edit.php?post_type=admissions' );
 
 	}
 	
@@ -84,6 +85,7 @@ class Wp_Medical_Records_Admin {
 				<a href="edit.php?post_type=doctors" class="nav-tab <?php if($cs == 'edit-doctors') echo 'nav-tab-active'; else echo ''; ?>  nav-tab-2">Doctors</a>
 				<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
 				<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
+				<a href="edit.php?post_type=admissions" class="nav-tab <?php if($cs == 'edit-admissions') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Admissions</a>
 			</h1>
 			<?php
 		}
@@ -108,6 +110,10 @@ class Wp_Medical_Records_Admin {
 			case 'visits':
 				$parent_file = 'wpmr-main'; 
 				$submenu_file = 'edit.php?post_type=visits';
+				break;
+			case 'admissions':
+				$parent_file = 'wpmr-main'; 
+				$submenu_file = 'edit.php?post_type=admissions';
 				break;
 		}
 	}
