@@ -306,6 +306,14 @@ class Visit {
 				<label class="wpmr-label" for="wpmr_visit_pressure"><?php _e( "Blood pressure:", 'wpmr' ); ?></label>
 				<input class="form-control" type="text" name="wpmr_visit_pressure" id="wpmr_visit_pressure" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_visit_pressure', true ) ); ?>" size="30" />
 			</div>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_visit_sugar"><?php _e( "Blood sugar:", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_visit_sugar" id="wpmr_visit_sugar" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_visit_sugar', true ) ); ?>" size="30" />
+			</div>
+			<div class="col-md-6 form-group">
+				<label class="wpmr-label" for="wpmr_visit_spo2"><?php _e( "SpO2 (Oxygen Saturation):", 'wpmr' ); ?></label>
+				<input class="form-control" type="text" name="wpmr_visit_spo2" id="wpmr_visit_spo2" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_visit_spo2', true ) ); ?>" size="30" />
+			</div>
 		</div>
 		<?php
 	}
@@ -338,6 +346,8 @@ class Visit {
 			'wpmr_visit_pulse',
 			'wpmr_visit_respiratory',
 			'wpmr_visit_pressure',
+			'wpmr_visit_sugar',
+			'wpmr_visit_spo2',
 		];
 
 		foreach($meta_data as $data) {
