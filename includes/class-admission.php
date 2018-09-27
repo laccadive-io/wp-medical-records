@@ -246,18 +246,18 @@ class Admission {
 									if(finalBmi > 25){
 										var bmiResult = "Overweight";
 									}
-									let bmiObj = {
-										bmi: finalBmi, 
-										bmi_result: bmiResult
-									};
-									let newObj = Object.assign({}, allVitals[index], bmiObj);
-									allVitals[index] = newObj;
 								}
 								else{
 									var bmiResult = "Please Fill in everything correctly";
 								}
+								let bmiObj = {
+									bmi: finalBmi, 
+									bmi_result: bmiResult
+								};
+								newObj = Object.assign({}, allVitals[index], bmiObj);
+								allVitals[index] = newObj;
+								document.getElementsByName(`wpmr_admission_vitals[${index}][bmi_result]`)[0].value = bmiResult;
 							}
-							document.getElementsByName(`wpmr_admission_vitals[${index}][bmi_result]`)[0].value = bmiResult;
 							console.log("List item ", e.target.name, " entered: ", e.target.value);
 							document.querySelector('#wpmr_admission_all_vitals').value = JSON.stringify(allVitals);
 						}
@@ -309,11 +309,11 @@ class Admission {
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_bmi">BMI:</label>
-									<input readonly class="form-control" value="${vitalObj.bmi || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi]" id="wpmr_admission_bmi" size="30" />
+									<input readonly tabindex="-1" class="form-control" value="${vitalObj.bmi || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi]" id="wpmr_admission_bmi" size="30" />
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_bmi_result">BMI Result:</label>
-									<input readonly class="form-control" value="${vitalObj.bmi_result || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
+									<input readonly tabindex="-1" class="form-control" value="${vitalObj.bmi_result || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_temperature">Temperature:</label>
@@ -372,11 +372,11 @@ class Admission {
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_bmi">BMI:</label>
-									<input readonly class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi]" id="wpmr_admission_bmi" size="30" />
+									<input readonly readonly tabindex="-1" class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi]" id="wpmr_admission_bmi" size="30" />
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_bmi_result">BMI Result:</label>
-									<input readonly class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
+									<input readonly readonly tabindex="-1" class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
 								</div>
 								<div class="col-md-6 form-group">
 									<label class="wpmr-label" for="wpmr_admission_temperature">Temperature:</label>
