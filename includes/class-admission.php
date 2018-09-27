@@ -215,9 +215,57 @@ class Admission {
 								$("#episodeSelect").show();
 							}
 						})
-					})					
+					})		
+					// Get the element, add a click listener...
+					document.getElementById("vitalsAccordion").addEventListener("keyup", function(e) {
+						// e.target is the clicked element!
+						// If it was a list item
+						if(e.target && e.target.nodeName == "INPUT") {
+							// List item found!  Output the ID!
+							// wpmr_admission_vitals[0][height]:aa
+							let allVitals = JSON.parse(document.querySelector('#wpmr_admission_all_vitals').value);
+							debugger;
+							let index = Number(e.target.name.match(/\[(.*?)\]/)[1]);
+							let key = e.target.name.replace( /(^.*\[|\].*$)/g, '' );
+							var obj = {};
+							obj[key] = e.target.value;
+							let newObj = Object.assign({}, allVitals[index], obj);
+							allVitals[index] = newObj;
+							if(key === 'height' || key === 'weight') {
+								var height = document.getElementsByName(`wpmr_admission_vitals[${index}][height]`)[0].value;
+								var weight = document.getElementsByName(`wpmr_admission_vitals[${index}][weight]`)[0].value;
+								if(weight > 0 && height > 0) {	
+									var finalBmi = (weight/(height/100*height/100)).toFixed(2)
+									document.getElementsByName(`wpmr_admission_vitals[${index}][bmi]`)[0].value = finalBmi;
+									if(finalBmi < 18.5){
+										var bmiResult = "Underweight";
+									}
+									if(finalBmi > 18.5 && finalBmi < 25){
+										var bmiResult = "Healthy";
+									}
+									if(finalBmi > 25){
+										var bmiResult = "Overweight";
+									}
+									let bmiObj = {
+										bmi: finalBmi, 
+										bmi_result: bmiResult
+									};
+									let newObj = Object.assign({}, allVitals[index], bmiObj);
+									allVitals[index] = newObj;
+								}
+								else{
+									var bmiResult = "Please Fill in everything correctly";
+								}
+							}
+							document.getElementsByName(`wpmr_admission_vitals[${index}][bmi_result]`)[0].value = bmiResult;
+							console.log("List item ", e.target.name, " entered: ", e.target.value);
+							document.querySelector('#wpmr_admission_all_vitals').value = JSON.stringify(allVitals);
+						}
+					});	
+					// addVital(null, 0)
+					initVitals();
 				});
-
+				
 				$("#wpmr_admission_episode").chosen({
 					disable_search_threshold: 1,
 					allow_single_deselect: true,
@@ -226,6 +274,168 @@ class Admission {
 					width: "95%"
 				});
 			})(jQuery)
+			function initVitals() {
+				debugger;
+				let allVitals = document.querySelector('#wpmr_admission_all_vitals').value;
+				allVitals = JSON.parse(allVitals);
+				if (!allVitals.length > 0) {
+					addVital(null, 0);
+					return;
+				}
+				const allVitalsHTML = allVitals.map((vitalObj, index) => {
+					return (
+						`<div class="card" id="card${index}">
+						<div class="card-header" id="heading${index}">
+						<h5 class="mb-0 float-left">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+								Vital #${Number(index) + 1}
+							</button>
+						</h5>
+						<div class="inline float-right">
+							<button onclick="addVital(event, '${Number(index) + 1}')" class="btn btn-primary add-vital">+</button>
+							<button onclick="removeVital(event, '${index}')" class="btn btn-danger">-</button>
+						</div>
+						</div>
+						<div id="collapse${index}" class="collapse" aria-labelledby="headingTwo" data-parent="#vitalsAccordion">
+							<div class="card-body">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_visit_height">Height in cm:</label>
+									<input onkeyup value="${vitalObj.height || ''}" class="form-control" type="text" name="wpmr_admission_vitals[${index}][height]" id="wpmr_visit_height" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_visit_weight">Weight in KG:</label>
+									<input onkeyup value="${vitalObj.weight || ''}" class="form-control" type="text" name="wpmr_admission_vitals[${index}][weight]" id="wpmr_visit_weight" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_bmi">BMI:</label>
+									<input readonly class="form-control" value="${vitalObj.bmi || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi]" id="wpmr_admission_bmi" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_bmi_result">BMI Result:</label>
+									<input readonly class="form-control" value="${vitalObj.bmi_result || ''}" type="text" name="wpmr_admission_vitals[${index}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_temperature">Temperature:</label>
+									<input class="form-control" type="text" value="${vitalObj.temperature || ''}" name="wpmr_admission_vitals[${index}][temperature]" id="wpmr_admission_temperature" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_pulse">Pulse:</label>
+									<input class="form-control" type="text" value="${vitalObj.pulse || ''}" name="wpmr_admission_vitals[${index}][pulse]" id="wpmr_admission_pulse" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_respiratory">Respiratory rate:</label>
+									<input class="form-control" type="text" value="${vitalObj.respiratory || ''}" name="wpmr_admission_vitals[${index}][respiratory]" id="wpmr_admission_respiratory" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_pressure">Blood pressure:</label>
+									<input class="form-control" type="text" value="${vitalObj.pressure || ''}" name="wpmr_admission_vitals[${index}][pressure]" id="wpmr_admission_pressure" size="30" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>`
+					)
+				})
+				document.querySelector('#vitalsAccordion').innerHTML = allVitalsHTML;
+				jQuery(`#collapse${document.querySelectorAll('#vitalsAccordion .card').length - 1}`).collapse('show');
+				refreshRemoveButtons();
+			}
+			function addVital(e, newIndex) {
+				// console.log(e, index)
+				e && e.preventDefault();
+				// var newIndex = String(Number(index) + 1);
+				var e = document.createElement('div');
+				e.innerHTML = 
+					`<div class="card" id="card${newIndex}">
+						<div class="card-header" id="heading${newIndex}">
+						<h5 class="mb-0 float-left">
+							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${newIndex}" aria-expanded="true" aria-controls="collapse${newIndex}">
+								Vital #${Number(newIndex) + 1}
+							</button>
+						</h5>
+						<div class="inline float-right">
+							<button onclick="addVital(event, '${Number(newIndex) + 1}')" class="btn btn-primary add-vital">+</button>
+							<button onclick="removeVital(event, '${newIndex}')" class="btn btn-danger">-</button>
+						</div>
+						</div>
+						<div id="collapse${newIndex}" class="collapse" aria-labelledby="headingTwo" data-parent="#vitalsAccordion">
+							<div class="card-body">
+							<div class="row">
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_visit_height">Height in cm:</label>
+									<input onkeyup class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][height]" id="wpmr_visit_height" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_visit_weight">Weight in KG:</label>
+									<input onkeyup class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][weight]" id="wpmr_visit_weight" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_bmi">BMI:</label>
+									<input readonly class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi]" id="wpmr_admission_bmi" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_bmi_result">BMI Result:</label>
+									<input readonly class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][bmi_result]" id="wpmr_admission_bmi_result" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_temperature">Temperature:</label>
+									<input class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][temperature]" id="wpmr_admission_temperature" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_pulse">Pulse:</label>
+									<input class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][pulse]" id="wpmr_admission_pulse" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_respiratory">Respiratory rate:</label>
+									<input class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][respiratory]" id="wpmr_admission_respiratory" size="30" />
+								</div>
+								<div class="col-md-6 form-group">
+									<label class="wpmr-label" for="wpmr_admission_pressure">Blood pressure:</label>
+									<input class="form-control" type="text" name="wpmr_admission_vitals[${newIndex}][pressure]" id="wpmr_admission_pressure" size="30" />
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>`;
+				while(e.firstChild) {
+					document.querySelector('#vitalsAccordion').appendChild(e.firstChild);
+				}
+				var allVitals = JSON.parse(document.querySelector('#wpmr_admission_all_vitals').value);
+				allVitals[0] = {};
+				document.querySelector('#wpmr_admission_all_vitals').value = JSON.stringify(allVitals);
+				refreshRemoveButtons();
+				jQuery(`#collapse${document.querySelectorAll('#vitalsAccordion .card').length - 1}`).collapse('show');
+			}
+			function removeVital(e, index) {
+				console.log('removeVital', index)
+				e.preventDefault();
+				var accordion = document.querySelector('#vitalsAccordion');
+				// var cards = document.querySelectorAll('#vitalsAccordion .card');
+				// console.log('cards,',cards)
+				accordion.removeChild(document.querySelector('#card' + index));
+				var allVitals = JSON.parse(document.querySelector('#wpmr_admission_all_vitals').value);
+				allVitals.splice(index, 1);
+				document.querySelector('#wpmr_admission_all_vitals').value = JSON.stringify(allVitals);
+				refreshRemoveButtons();
+				jQuery(`#collapse${document.querySelectorAll('#vitalsAccordion .card').length - 1}`).collapse('show');
+			}
+			function refreshRemoveButtons() {
+				var addVitalButtons = Array.from(document.querySelectorAll('.add-vital'));
+				addVitalButtons.map((item, index) => {
+					if(index !== addVitalButtons.length - 1) {
+						item.style.display = 'none';
+					} else {
+						item.style.display = 'inline-block';
+					}
+				});
+				
+				if (!document.querySelector('#vitalsAccordion .card')) {
+					document.querySelector('.add-vital.when-empty').style.display = 'block';
+				} else {
+					document.querySelector('.add-vital.when-empty').style.display = 'none';
+				}
+			}
 			function calculateBmi() {
 				var weight = document.getElementById('wpmr_admission_weight').value
 				var height = document.getElementById('wpmr_admission_height').value
@@ -275,42 +485,14 @@ class Admission {
 		<?php
 	}
 
-	function wpmr_admission_vital_meta_box( $post ) { ?>
-		<div class="row">
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_height"><?php _e( "Height in cm:", 'wpmr' ); ?></label>
-				<input onkeyup="calculateBmi()" class="form-control" type="text" name="wpmr_admission_height" id="wpmr_admission_height" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_height', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_weight"><?php _e( "Weight in KG:", 'wpmr' ); ?></label>
-				<input onkeyup="calculateBmi()" class="form-control" type="text" name="wpmr_admission_weight" id="wpmr_admission_weight" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_weight', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_bmi"><?php _e( "BMI:", 'wpmr' ); ?></label>
-				<input readonly class="form-control" type="text" name="wpmr_admission_bmi" id="wpmr_admission_bmi" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_bmi', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_bmi_result"><?php _e( "BMI Result:", 'wpmr' ); ?></label>
-				<input readonly class="form-control" type="text" name="wpmr_admission_bmi_result" id="wpmr_admission_bmi_result" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_bmi_result', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_temperature"><?php _e( "Temperature:", 'wpmr' ); ?></label>
-				<input class="form-control" type="text" name="wpmr_admission_temperature" id="wpmr_admission_temperature" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_temperature', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_pulse"><?php _e( "Pulse:", 'wpmr' ); ?></label>
-				<input class="form-control" type="text" name="wpmr_admission_pulse" id="wpmr_admission_pulse" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_pulse', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_respiratory"><?php _e( "Respiratory rate:", 'wpmr' ); ?></label>
-				<input class="form-control" type="text" name="wpmr_admission_respiratory" id="wpmr_admission_respiratory" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_respiratory', true ) ); ?>" size="30" />
-			</div>
-			<div class="col-md-6 form-group">
-				<label class="wpmr-label" for="wpmr_admission_pressure"><?php _e( "Blood pressure:", 'wpmr' ); ?></label>
-				<input class="form-control" type="text" name="wpmr_admission_pressure" id="wpmr_admission_pressure" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_admission_pressure', true ) ); ?>" size="30" />
-			</div>
+	function wpmr_admission_vital_meta_box( $post ) { 
+			?>
+		<button onclick="addVital(event, 0)" style="display:none;" class="btn btn-primary add-vital when-empty float-right mr-3 mt-2">+</button>
+		<?php $all_vitals = esc_attr( get_post_meta( $post->ID, 'wpmr_admission_all_vitals', true ) );  ?>
+		<input type="hidden" id="wpmr_admission_all_vitals" name="wpmr_admission_all_vitals"  value="<?php echo $all_vitals ? $all_vitals : '{}'; ?>" />
+		<div class="accordion" id="vitalsAccordion">
 		</div>
-		<?php
+			<?php
 	}
 
 	/* Save the meta box's post metadata. */
@@ -334,14 +516,7 @@ class Admission {
 			'wpmr_admission_ailment',
 			'wpmr_admission_notes',
 			'wpmr_admission_episode',
-			'wpmr_admission_height',
-			'wpmr_admission_weight',
-			'wpmr_admission_bmi',
-			'wpmr_admission_bmi_result',
-			'wpmr_admission_temperature',
-			'wpmr_admission_pulse',
-			'wpmr_admission_respiratory',
-			'wpmr_admission_pressure',
+			'wpmr_admission_all_vitals',
 		];
 
 		foreach ( $meta_data as $data ) {
