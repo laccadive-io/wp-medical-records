@@ -37,3 +37,13 @@ button.btn.btn-link {
   padding: 5px 10px;
   height: 35px;
 }
+
+.form-group .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  color: white;
+}
+
+.form-group .select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #03A9F4;
+  color: white;
+  line-height: 2;
+}

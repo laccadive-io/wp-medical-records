@@ -18,7 +18,11 @@ class Patient {
 
 		add_action( 'load-post.php',  array($this, 'wpmr_patient_meta_boxes_setup' ) );
         
-        add_action( 'load-post-new.php',  array($this, 'wpmr_patient_meta_boxes_setup' ) );
+		add_action( 'load-post-new.php',  array($this, 'wpmr_patient_meta_boxes_setup' ) );
+		
+		add_filter( 'wp_ajax_nopriv_add_allergy', array($this, 'wpmr_add_allergy' ) );
+		
+		add_filter( 'wp_ajax_add_allergy', array($this, 'wpmr_add_allergy' ) );
     }
 
 	public function wpmr_patients_cpt() {
@@ -144,6 +148,27 @@ class Patient {
 					yearRange: yrRange, 
 				}); 
 			});
+			$('#wpmr_patient_allergies').select2({
+				width: '100%',
+				tags: true,
+			}).on("select2:select", function(e) {
+				if(isNaN(e.params.data.id)) {
+					var newOption = $(this).find('[value="'+e.params.data.id+'"]')
+					// store the new tag:
+					jQuery.ajax({
+						method: 'POST',
+						url: ajaxurl,
+						data: {
+							term: e.params.data.text,
+							action: "add_allergy",
+						}
+					}).done(function(res) {
+						var jsonData = JSON.parse(res);
+						var termId = jsonData.term_id;
+						newOption.replaceWith('<option selected value="'+termId+'">'+e.params.data.text+'</option>');
+					});
+				}
+			});
 		</script>
 		<style>
 			.ui-datepicker {
@@ -157,11 +182,38 @@ class Patient {
 		</style>
 		<?php 
 	}
-	public function wpmr_patient_medical_meta_box( $post ) { ?>
+	public function wpmr_patient_medical_meta_box( $post ) { 
+		$args = array (
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+			'hide_empty' => 0,
+			'taxonomy'   => 'allergy',
+		);
+		$allergies = get_categories( $args );
+		// var_dump( $allergies );
+		// die();
+		$selected_allergies = json_decode( get_post_meta( $post->ID, 'wpmr_patient_allergies', true ) );
+		// var_dump($selected_allergies);
+		// die();
+	?>
 	<div class="row">
 		<div class="col-md-6 form-group">
 			<label class="wpmr-label " for="wpmr_patient_allergies"><?php _e( "Allergies:", 'wpmr' ); ?></label>
-			<input class="form-control" type="text" name="wpmr_patient_allergies" id="wpmr_patient_allergies" value="<?php echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_allergies', true ) ); ?>" size="30" />
+			<select data-placeholder="Choose patient's allergies" class="" multiple="multiple" name="wpmr_patient_allergies[]" id="wpmr_patient_allergies" >
+			<!-- <input class="form-control" type="text" name="wpmr_patient_allergies" id="wpmr_patient_allergies" value="<?php //echo esc_attr( get_post_meta( $post->ID, 'wpmr_patient_allergies', true ) ); ?>" size="30" /> -->
+			<option value="-1" disabled>Select Allergy</option>
+
+			<?php
+			foreach($allergies as $allergy) { 
+				if( in_array($allergy->term_id, $selected_allergies)	) {
+					$selected = 'selected';
+				} else {
+					$selected = '';
+				}
+				echo '<option value="' . $allergy->term_id . '" ' . $selected . '>'. $allergy->name .'</option>';
+			}
+			?>
+			</select>
 		</div>
 
 		<div class="col-md-6 form-group">
@@ -217,8 +269,12 @@ class Patient {
 		];
 
 		foreach($meta_data as $data) {
-			/* Get the posted data and sanitize it for use as an HTML class. */
-			$new_meta_value = ( isset( $_POST[$data] ) ? sanitize_text_field( $_POST[$data] ) : '' );
+
+			if( $data === 'wpmr_patient_allergies' ) {
+				$new_meta_value = ( isset( $_POST[$data] ) ? json_encode( $_POST[$data] ) : '' );
+			} else {
+				$new_meta_value = ( isset( $_POST[$data] ) ? sanitize_text_field( $_POST[$data] ) : '' );
+			}
 				
 			/* Get the meta key. */
 			$meta_key = $data;
@@ -268,7 +324,7 @@ class Patient {
 		return $input;
 	}
 
-	function wpmr_patients_allergy_tax() {
+	public function wpmr_patients_allergy_tax() {
 		$args = array( 
 			'hierarchical'                      => true,
 			'show_in_rest'          			=> true,  
@@ -292,4 +348,12 @@ class Patient {
 		);
 		register_taxonomy( 'allergy', array( 'patients' ), $args );
 	}
+
+	public function wpmr_add_allergy() {
+		$term = $_POST['term'];
+		$new_term = wp_insert_term( $term, 'allergy' );
+		echo json_encode($new_term);
+		wp_die();
+	}
 }
+
