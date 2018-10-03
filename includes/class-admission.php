@@ -408,7 +408,8 @@ class Admission {
 				jQuery(`#collapse${document.querySelectorAll('#vitalsAccordion .card').length - 1}`).collapse('show');
 			}
 			function removeVital(e, index) {
-				console.log('removeVital', index)
+				if(!confirm('Are your sure you want to remove this vital data?'))
+					return;
 				e.preventDefault();
 				var accordion = document.querySelector('#vitalsAccordion');
 				// var cards = document.querySelectorAll('#vitalsAccordion .card');

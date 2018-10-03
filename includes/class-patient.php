@@ -6,7 +6,9 @@ class Patient {
 
     public function run() {
         
-        add_action('init', array( $this, 'wpmr_patients_cpt') );
+		add_action('init', array( $this, 'wpmr_patients_cpt') );
+		
+		add_action( 'init', array( $this, 'wpmr_patients_allergy_tax' ) );
         
 		add_action('admin_enqueue_scripts', array($this, 'wpmr_enqueue_date_picker') );
  
@@ -264,5 +266,30 @@ class Patient {
 		if( is_admin() && 'Enter title here' == $input && 'patients' == $post_type )
 			return 'Enter Patient\'s Full Name';
 		return $input;
+	}
+
+	function wpmr_patients_allergy_tax() {
+		$args = array( 
+			'hierarchical'                      => true,
+			'show_in_rest'          			=> true,  
+			'labels' => array(
+				'name'                          => _x('Allergies', 'taxonomy general name' ),
+				'singular_name'                 => _x('Allergy', 'taxonomy singular name'),
+				'search_items'                  => __('Search Allergy'),
+				'popular_items'                 => __('Popular Allergy'),
+				'all_items'                     => __('All Allergy'),
+				'edit_item'                     => __('Edit Allergy'),
+				'edit_item'                     => __('Edit Allergy'),
+				'update_item'                   => __('Update Allergy'),
+				'add_new_item'                  => __('Add New Allergy'),
+				'new_item_name'                 => __('New Allergy Name'),
+				'separate_items_with_commas'    => __('Seperate Allergy with Commas'),
+				'add_or_remove_items'           => __('Add or Remove Allergy'),
+				'choose_from_most_used'         => __('Choose from Most Used Allergy')
+			),  
+			'query_var'                         => true,  
+			'rewrite'                           => array('slug' =>'allergy')        
+		);
+		register_taxonomy( 'allergy', array( 'patients' ), $args );
 	}
 }

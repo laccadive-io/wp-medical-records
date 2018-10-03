@@ -68,6 +68,7 @@ class Wp_Medical_Records_Admin {
 		// 'manage_options', 'edit.php?post_type=patients' );
 		global $submenu;
 		$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
+		$submenu['wpmr-main'][] = array( 'Allergies', true, 'edit-tags.php?taxonomy=allergy&post_type=patients' );
 		$submenu['wpmr-main'][] = array( 'Doctors', true, 'edit.php?post_type=doctors' );
 		$submenu['wpmr-main'][] = array( 'Episodes', true, 'edit.php?post_type=episodes' );
 		$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
@@ -97,7 +98,10 @@ class Wp_Medical_Records_Admin {
 		switch ( $post_type ) {
 			case 'patients':
 				$parent_file = 'wpmr-main'; 
-				$submenu_file = 'edit.php?post_type=patients';
+				if( $submenu_file == "edit-tags.php?taxonomy=allergy&amp;post_type=patients")
+					$submenu_file = "edit-tags.php?taxonomy=allergy&post_type=patients";
+				else
+					$submenu_file = 'edit.php?post_type=patients';
 				break;
 			case 'doctors':
 				$parent_file = 'wpmr-main'; 
@@ -180,5 +184,4 @@ class Wp_Medical_Records_Admin {
 		wp_enqueue_script( 'chosen-jquery', plugin_dir_url( __FILE__ ) . 'js/chosen.jquery.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
 	}
-	
 }
