@@ -133,12 +133,10 @@ class Episode {
             		changeYear: true,
 					yearRange: yrRange, 
 				}); 
-				jQuery("#wpmr_episode_patient").chosen({
-					disable_search_threshold: 1,
-					allow_single_deselect: true,
-					disable_search: false,
-					no_results_text: "Oops, nothing found!",
-					width: "95%"
+				jQuery("#wpmr_episode_patient").select2({
+					width: '100%',
+					placeholder: "Select Episode",
+					allowClear: true
 				})
 			});
 		</script>

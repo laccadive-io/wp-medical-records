@@ -156,13 +156,17 @@ class Visit {
 						'meta_value'		 => $selected_patient
 					);
 					$query = new WP_Query($args);
-					$posts = $query->posts;
-					foreach($posts as $episode) {
-						if($selected_episode == $episode->ID)
-							$selected = "selected";
-						else
-							$selected = "";
-						echo '<option value="' . $episode->ID . '" ' . $selected . '>'. $episode->post_title .'</option>';
+					$episodes = $query->posts;
+					if( $selected_patient ) {
+						foreach($episodes as $episode) {
+							if($selected_episode == $episode->ID)
+								$selected = "selected";
+							else
+								$selected = "";
+							echo '<option value="' . $episode->ID . '" ' . $selected . '>'. $episode->post_title .'</option>';
+						}
+					} else {
+						echo '<option value="-1" selected>Select a patient first</option>';
 					}
 				?>
 				</select>
@@ -181,20 +185,19 @@ class Visit {
 						changeYear: true,
 						yearRange: yrRange, 
 					}); 
-					$("#wpmr_visit_patient").chosen({
-						disable_search_threshold: 1,
-						allow_single_deselect: true,
-						disable_search: false,
-						no_results_text: "Oops, nothing found!",
-						width: "95%"
-					}).change(function(data) {
-						console.log(data.currentTarget.value)
+					$("#wpmr_visit_patient").select2({
+							width: '100%',
+							placeholder: "Select Patient",
+							allowClear: true
+						}).on("select2:select", function(e) {
+							var id = e.params.data.id;
+						console.log(id)
 						$.ajax({
 							method: 'get',
 							url: window.ajaxurl,
 							data: {
 								action: 'patient_episodes_ajax',
-								patientId: data.currentTarget.value,
+								patientId: id,
 							},
 							success: function(data) {
 								var jsonData = JSON.parse(data);
@@ -208,19 +211,15 @@ class Visit {
 									options = '<span>This patient does not have an episode yet. Please create one first.</span>';
 								}
 								$("#wpmr_visit_episode").html(options)
-								$("#wpmr_visit_episode").trigger("chosen:updated");
-								$("#episodeSelect").show();
 							}
 						})
 					})					
 				});
 
-				$("#wpmr_visit_episode").chosen({
-					disable_search_threshold: 1,
-					allow_single_deselect: true,
-					disable_search: false,
-					no_results_text: "Oops, nothing found!",
-					width: "95%"
+				$("#wpmr_visit_episode").select2({
+					width: '100%',
+					placeholder: "Select Episode",
+					allowClear: true
 				});
 			})(jQuery)
 			function calculateBmi() {

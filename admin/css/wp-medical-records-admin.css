@@ -29,15 +29,6 @@ button.btn.btn-link {
   text-decoration: none;
 }
 
-.form-group .chosen-container-single .chosen-single div {
-  top: 5px;
-}
-
-.form-group .chosen-container-single .chosen-single {
-  padding: 5px 10px;
-  height: 35px;
-}
-
 .form-group .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   color: white;
 }

@@ -184,20 +184,19 @@ class Admission {
 						changeYear: true,
 						yearRange: yrRange,
 					}); 
-					$("#wpmr_admission_patient").chosen({
-						disable_search_threshold: 1,
-						allow_single_deselect: true,
-						disable_search: false,
-						no_results_text: "Oops, nothing found!",
-						width: "95%"
-					}).change(function(data) {
-						console.log(data.currentTarget.value)
+					$("#wpmr_admission_patient").select2({
+							width: '100%',
+							placeholder: "Select Patient",
+							allowClear: true
+						}).on("select2:select", function(e) {
+							var id = e.params.data.id;
+						console.log(id)
 						$.ajax({
 							method: 'get',
 							url: window.ajaxurl,
 							data: {
 								action: 'patient_episodes_ajax',
-								patientId: data.currentTarget.value,
+								patientId: id,
 							},
 							success: function(data) {
 								var jsonData = JSON.parse(data);
@@ -211,11 +210,15 @@ class Admission {
 									options = '<span>This patient does not have an episode yet. Please create one first.</span>';
 								}
 								$("#wpmr_admission_episode").html(options)
-								$("#wpmr_admission_episode").trigger("chosen:updated");
-								$("#episodeSelect").show();
 							}
 						})
-					})		
+					})
+				
+					$("#wpmr_admission_episode").select2({
+						width: '100%',
+						placeholder: "Select Episode",
+						allowClear: true
+					});
 					// Get the element, add a click listener...
 					document.getElementById("vitalsAccordion").addEventListener("keyup", function(e) {
 						// e.target is the clicked element!
@@ -264,14 +267,6 @@ class Admission {
 					});	
 					// addVital(null, 0)
 					initVitals();
-				});
-				
-				$("#wpmr_admission_episode").chosen({
-					disable_search_threshold: 1,
-					allow_single_deselect: true,
-					disable_search: false,
-					no_results_text: "Oops, nothing found!",
-					width: "95%"
 				});
 			})(jQuery)
 			function initVitals() {
