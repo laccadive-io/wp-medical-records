@@ -61,11 +61,23 @@ class Wp_Medical_Records_Admin {
 		// add_shortcode('test',  array($this, 'form_creation' ) );
 	}
 
+	public function reports_page() {
+		$tab = $_GET['tab'];
+		if( $tab == 'patients' ) {
+				require_once( plugin_dir_path( __FILE__ ) . '../includes/reports/patient-reports.php');
+		} elseif( $tab == 'doctors' ) {
+			?>
+			<h1>Doctors</h1>
+			<?php
+		} 
+	}
+
 	public function wpmr_setup_menu(){
 		add_menu_page( 'Main Menu Page', 'Medical Records', 'manage_options', 
 		'wpmr-main', 'wpmr_home' );
-		// add_submenu_page( 'wpmr-main', 'Patients', 'Patients', 
-		// 'manage_options', 'edit.php?post_type=patients' );
+		// add_submenu_page( 'wpmr-main', 'Patients', 'Patients', 'manage_options', 'edit.php?post_type=patients' );
+		add_submenu_page( 'wpmr-main', 'Reports', 'Reports' , 'manage_options', 'wpmr-reports', array( $this, 'reports_page' ) );
+
 		global $submenu;
 		$submenu['wpmr-main'][] = array( 'Patients', true, 'edit.php?post_type=patients' );
 		$submenu['wpmr-main'][] = array( 'Allergies', true, 'edit-tags.php?taxonomy=allergy&post_type=patients' );
@@ -87,6 +99,18 @@ class Wp_Medical_Records_Admin {
 				<a href="edit.php?post_type=episodes" class="nav-tab <?php if($cs == 'edit-episodes') echo 'nav-tab-active'; else echo ''; ?> nav-tab-3">Episodes</a>
 				<a href="edit.php?post_type=visits" class="nav-tab <?php if($cs == 'edit-visits') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Visits</a>
 				<a href="edit.php?post_type=admissions" class="nav-tab <?php if($cs == 'edit-admissions') echo 'nav-tab-active'; else echo ''; ?> nav-tab-4">Admissions</a>
+			</h1>
+			<?php
+		}
+		if( $cs == 'medical-records_page_wpmr-reports' ) {
+			$tab = $_GET['tab'];
+			?>
+			<h1 class="nav-tab-wrapper">
+				<a href="admin.php?page=wpmr-reports&tab=patients" class="nav-tab <?php if( $cs == 'medical-records_page_wpmr-reports' && $tab == 'patients' ) echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">Patients</a>
+				<a href="admin.php?page=wpmr-reports&tab=doctors" class="nav-tab <?php if( $cs == 'medical-records_page_wpmr-reports' && $tab == 'doctors' ) echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">Doctors</a>
+				<a href="admin.php?page=wpmr-reports&tab=episodes" class="nav-tab <?php if( $cs == 'medical-records_page_wpmr-reports' && $tab == 'episodes' ) echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">Episodes</a>
+				<a href="admin.php?page=wpmr-reports&tab=visits" class="nav-tab <?php if( $cs == 'medical-records_page_wpmr-reports' && $tab == 'visits' ) echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">Visits</a>
+				<a href="admin.php?page=wpmr-reports&tab=admissions" class="nav-tab <?php if( $cs == 'medical-records_page_wpmr-reports' && $tab == 'admissions' ) echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">Admissions</a>
 			</h1>
 			<?php
 		}
@@ -183,5 +207,8 @@ class Wp_Medical_Records_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-medical-records-admin.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'bootstrap', plugin_dir_url( __FILE__ ) . 'js/bootstrap.min.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( 'select2', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'd3', plugin_dir_url( __FILE__ ) . 'js/d3.min.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'Chart', plugin_dir_url( __FILE__ ) . 'js/Chart.min.js', array( 'jquery' ), $this->version, false );
+
 	}
 }
