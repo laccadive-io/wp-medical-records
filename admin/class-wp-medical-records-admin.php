@@ -74,7 +74,7 @@ class Wp_Medical_Records_Admin {
 
 	public function wpmr_setup_menu(){
 		add_menu_page( 'Main Menu Page', 'Medical Records', 'manage_options', 
-		'wpmr-main', 'wpmr_home' );
+		'wpmr-main', array( $this, 'wpmr_home' ) );
 		// add_submenu_page( 'wpmr-main', 'Patients', 'Patients', 'manage_options', 'edit.php?post_type=patients' );
 		add_submenu_page( 'wpmr-main', 'Reports', 'Reports' , 'manage_options', 'wpmr-reports', array( $this, 'reports_page' ) );
 
@@ -86,6 +86,12 @@ class Wp_Medical_Records_Admin {
 		$submenu['wpmr-main'][] = array( 'Visits', true, 'edit.php?post_type=visits' );
 		$submenu['wpmr-main'][] = array( 'Admissions', true, 'edit.php?post_type=admissions' );
 
+	}
+
+	public function wpmr_home() {
+		?>
+			<h1>WP Medical Records</h1>
+		<?php
 	}
 	
 	public function wpmr_admin_tabs() {
