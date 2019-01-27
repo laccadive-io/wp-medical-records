@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       WP Medical Records
  * Plugin URI:        https://laccadive.io/
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       WP Medical Records is a WordPress plugin for doctor, patient and visit management.
  * Version:           1.0.0
  * Author:            Laccadive IO
  * Author URI:        https://laccadive.io/
