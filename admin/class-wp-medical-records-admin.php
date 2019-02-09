@@ -63,12 +63,20 @@ class Wp_Medical_Records_Admin {
 
 	public function reports_page() {
 		$tab = $_GET['tab'];
-		if( $tab == 'patients' ) {
+		switch ($tab) {
+			case 'patients':
 				require_once( plugin_dir_path( __FILE__ ) . '../includes/reports/patient-reports.php');
-		} elseif( $tab == 'doctors' ) {
-			?>
-			<h1>Doctors</h1>
-			<?php
+				break;
+			case 'doctors':
+				?>
+				<h1>Doctors</h1>
+				<?php
+				break;
+			default:
+				?>
+				<h1>Content yet to be loaded.</h1>
+				<?php
+				break;
 		} 
 	}
 
@@ -96,7 +104,7 @@ class Wp_Medical_Records_Admin {
 	
 	public function wpmr_admin_tabs() {
 		$cs = get_current_screen()->id;
-		if($cs == 'edit-patients'|| $cs == 'patients' || $cs == 'edit-episodes' || $cs == 'edit-visits') {
+		if(in_array($cs, ['edit-patients', 'patients', 'edit-episodes', 'edit-visits', 'edit-admissions', 'edit-doctors'])) {
 			?>
 			<h1 class="nav-tab-wrapper">
 				<a href="post-new.php?post_type=patients" class="nav-tab <?php if($cs == 'patients') echo 'nav-tab-active'; else echo ''; ?> nav-tab-1">New Patient</a>
@@ -124,7 +132,6 @@ class Wp_Medical_Records_Admin {
 	 
 	public function menu_highlight(){
 		global $parent_file, $submenu_file, $post_type;
-		
 		switch ( $post_type ) {
 			case 'patients':
 				$parent_file = 'wpmr-main'; 
