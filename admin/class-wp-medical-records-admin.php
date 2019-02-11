@@ -97,8 +97,64 @@ class Wp_Medical_Records_Admin {
 	}
 
 	public function wpmr_home() {
+		$totalPatients = get_posts([
+		  'post_type' => 'patients',
+		  'post_status' => 'publish',
+		  'numberposts' => -1
+		]);
+
+		$totalAllergies = get_terms([
+		  'taxonomy' => 'allergy',
+		  'hide_empty' => false,
+		]);
+
+		$totalDoctors = get_posts([
+		  'post_type' => 'doctors',
+		  'post_status' => 'publish',
+		  'numberposts' => -1
+		]);
+
+		$totalEpisodes = get_posts([
+		  'post_type' => 'episodes',
+		  'post_status' => 'publish',
+		  'numberposts' => -1
+		]);
 		?>
 			<h1>WP Medical Records</h1>
+			<div class="row" style="width:1200px;">
+				<div class="col-sm-12 col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<h4><?= count($totalPatients) ?></h4>
+							<p><?= count($totalPatients) == 1 ? 'Patient': 'Patients';  ?></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<h4><?= count($totalAllergies); ?></h4>
+							<p><?= count($totalAllergies) == 1 ? 'Allergy': 'Allergies'; ?></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<h4><?= count($totalDoctors) ?></h4>
+							<p><?= count($totalDoctors) == 1 ? 'Doctor': 'Doctors' ?></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-3">
+					<div class="card">
+						<div class="card-body">
+							<h4><?= count($totalEpisodes); ?></h4>
+							<p><?= count($totalEpisodes) == 1 ?  'Episode': 'Episodes'; ?></p>
+						</div>
+					</div>
+				</div>
+			</div>
 		<?php
 	}
 	
