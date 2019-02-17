@@ -97,60 +97,43 @@ class Wp_Medical_Records_Admin {
 	}
 
 	public function wpmr_home() {
-		$totalPatients = get_posts([
-		  'post_type' => 'patients',
-		  'post_status' => 'publish',
-		  'numberposts' => -1
-		]);
+		$totalPatients = wp_count_posts('patients')->publish;
+		$totalAllergies = wp_count_terms('allergy');
+		$totalDoctors = wp_count_posts('doctors')->publish;
+		$totalEpisodes = wp_count_posts('episodes')->publish;
 
-		$totalAllergies = get_terms([
-		  'taxonomy' => 'allergy',
-		  'hide_empty' => false,
-		]);
-
-		$totalDoctors = get_posts([
-		  'post_type' => 'doctors',
-		  'post_status' => 'publish',
-		  'numberposts' => -1
-		]);
-
-		$totalEpisodes = get_posts([
-		  'post_type' => 'episodes',
-		  'post_status' => 'publish',
-		  'numberposts' => -1
-		]);
 		?>
 			<h1>WP Medical Records</h1>
 			<div class="row" style="width:1200px;">
 				<div class="col-sm-12 col-md-3">
 					<div class="card">
 						<div class="card-body">
-							<h4><?= count($totalPatients) ?></h4>
-							<p><?= count($totalPatients) == 1 ? 'Patient': 'Patients';  ?></p>
+							<h4><?= $totalPatients ?></h4>
+							<p><?= _n('Patient', 'Patients', $totalPatients);  ?></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-3">
 					<div class="card">
 						<div class="card-body">
-							<h4><?= count($totalAllergies); ?></h4>
-							<p><?= count($totalAllergies) == 1 ? 'Allergy': 'Allergies'; ?></p>
+							<h4><?= $totalAllergies; ?></h4>
+							<p><?= _n('Allergy', 'Allergies', $totalAllergies); ?></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-3">
 					<div class="card">
 						<div class="card-body">
-							<h4><?= count($totalDoctors) ?></h4>
-							<p><?= count($totalDoctors) == 1 ? 'Doctor': 'Doctors' ?></p>
+							<h4><?= $totalDoctors; ?></h4>
+							<p><?= _n('Doctor', 'Doctors', $totalDoctors); ?></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-3">
 					<div class="card">
 						<div class="card-body">
-							<h4><?= count($totalEpisodes); ?></h4>
-							<p><?= count($totalEpisodes) == 1 ?  'Episode': 'Episodes'; ?></p>
+							<h4><?= $totalEpisodes; ?></h4>
+							<p><?= _n('Episode', 'Episodes', $totalEpisodes); ?></p>
 						</div>
 					</div>
 				</div>
